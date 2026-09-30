@@ -350,6 +350,39 @@ footer{margin-top:64px;padding-top:23px}
   footer{display:block;font-size:10.5px;line-height:1.55}footer span{display:block;margin-top:5px}
 }
 
+/* ---- selector de mes ---- */
+.picker{display:inline-flex;flex-wrap:wrap;gap:4px;margin-top:26px;padding:4px;
+  background:var(--surface-2);border:1px solid var(--line);border-radius:15px;
+  box-shadow:inset 0 1px 2px rgba(18,19,20,.05)}
+.mbtn{appearance:none;cursor:pointer;font-family:"IBM Plex Sans",sans-serif;text-align:left;
+  background:transparent;border:0;border-radius:11px;padding:9px 15px 10px;
+  display:flex;flex-direction:column;gap:1px;position:relative;
+  transition:background .18s ease,box-shadow .18s ease,color .18s ease}
+.mbtn .ml{font-size:13.5px;font-weight:600;color:var(--ink-2);letter-spacing:-.01em;line-height:1.25}
+.mbtn .ms{font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--ink-3);letter-spacing:.03em;line-height:1.3}
+.mbtn:hover:not(.on){background:var(--surface)}
+.mbtn:hover:not(.on) .ml{color:var(--ink)}
+.mbtn.on{background:linear-gradient(157deg,#3a3b3f 0%,#141518 58%,#0b0c0e 100%);
+  box-shadow:0 1px 1px rgba(10,11,13,.5),0 8px 18px -10px rgba(10,11,13,.62),inset 0 1px 0 rgba(255,255,255,.13)}
+.mbtn.on .ml{color:#fff}
+.mbtn.on .ms{color:rgba(255,255,255,.58)}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]) .picker{box-shadow:inset 0 1px 2px rgba(0,0,0,.45)}
+  :root:not([data-theme="light"]) .mbtn.on{
+    background:linear-gradient(157deg,#55575c 0%,#2b2c30 58%,#1b1c1f 100%);
+    box-shadow:0 1px 1px rgba(0,0,0,.6),0 8px 18px -10px rgba(0,0,0,.8),inset 0 1px 0 rgba(255,255,255,.16)}
+}
+:root[data-theme="dark"] .picker{box-shadow:inset 0 1px 2px rgba(0,0,0,.45)}
+:root[data-theme="dark"] .mbtn.on{
+  background:linear-gradient(157deg,#55575c 0%,#2b2c30 58%,#1b1c1f 100%);
+  box-shadow:0 1px 1px rgba(0,0,0,.6),0 8px 18px -10px rgba(0,0,0,.8),inset 0 1px 0 rgba(255,255,255,.16)}
+.picker-note{font-size:12.5px;color:var(--ink-3);margin:10px 0 0}
+.hist-tag{display:inline-flex;align-items:center;gap:6px;font-family:"IBM Plex Mono",monospace;font-size:10px;
+  letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);border:1px solid var(--line);
+  border-radius:999px;padding:3px 9px;background:var(--surface-2)}
+@media (max-width:620px){.picker{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;width:100%}.mbtn{padding:8px 9px 9px}.mbtn .ml{font-size:12px}.mbtn .ms{font-size:8.5px}}
+.sec-hd h2 .hist-tag{margin-left:9px;vertical-align:middle;text-transform:uppercase}
+
 </style>
 <header>
   <div class="hd">
@@ -366,8 +399,8 @@ footer{margin-top:64px;padding-top:23px}
       </div>
     </div>
     <div class="hd-meta">
-      <div><div class="k">Período</div><div class="v">13 may – 30 sep 2026</div></div>
-      <div><div class="k">Días con entrega</div><div class="v">126 de 141</div></div>
+      <div><div class="k">Período</div><div class="v" id="k-periodo">13 may – 30 sep 2026</div></div>
+      <div><div class="k">Días con entrega</div><div class="v" id="k-dias">126 de 141</div></div>
       <div><div class="k">Moneda</div><div class="v">PYG (₲)</div></div>
       <div><div class="k">Cuenta</div><div class="v">2064824334450266</div></div>
     </div>
@@ -376,32 +409,35 @@ footer{margin-top:64px;padding-top:23px}
 
 <div class="wrap">
 
+  <div class="picker" id="picker" role="group" aria-label="Elegir período"></div>
+  <p class="picker-note">Los indicadores y los gráficos se recalculan con el período elegido.</p>
+
   <div class="hero">
     <div>
       <div class="lbl">Inversión total</div>
-      <div class="big">₲&nbsp;11.083.987</div>
-      <div class="foot">Promedio de <b class="num">₲ 87.968</b> por día con entrega, sobre 9 campañas y 34 anuncios</div>
+      <div class="big" id="h-spend">₲&nbsp;11.083.987</div>
+      <div class="foot" id="h-spend-foot">Promedio de <b class="num">₲ 87.968</b> por día con entrega, sobre 9 campañas y 34 anuncios</div>
     </div>
     <div>
       <div class="lbl">Contactos generados</div>
-      <div class="big">2.175</div>
-      <div class="foot">1.813 conversaciones iniciadas + 362 formularios completados</div>
+      <div class="big" id="h-cont">2.175</div>
+      <div class="foot" id="h-cont-foot">1.813 conversaciones iniciadas + 362 formularios completados</div>
     </div>
     <div>
       <div class="lbl">Costo por contacto</div>
-      <div class="big">₲&nbsp;5.096</div>
-      <div class="foot">Todo el gasto de la cuenta dividido por los 2.175 contactos</div>
+      <div class="big" id="h-cpc">₲&nbsp;5.096</div>
+      <div class="foot" id="h-cpc-foot">Todo el gasto de la cuenta dividido por los 2.175 contactos</div>
     </div>
   </div>
 
   <div class="grid4">
-    <div class="tile"><div class="lbl">Alcance</div><div class="v">177.132</div><div class="h">personas únicas</div></div>
-    <div class="tile"><div class="lbl">Impresiones</div><div class="v">1.036.157</div><div class="h">frecuencia 5,85</div></div>
-    <div class="tile"><div class="lbl">Clics (todos)</div><div class="v">32.609</div><div class="h">CTR 3,15%</div></div>
-    <div class="tile"><div class="lbl">Clics en el enlace</div><div class="v">17.869</div><div class="h">CPC ₲ 620</div></div>
-    <div class="tile"><div class="lbl">CPM</div><div class="v">₲ 10.697</div><div class="h">costo por mil impresiones</div></div>
-    <div class="tile"><div class="lbl">Interacciones</div><div class="v">20.943</div><div class="h">con las publicaciones</div></div>
-    <div class="tile"><div class="lbl">Primeras respuestas</div><div class="v">1.660</div><div class="h">de los chats abiertos</div></div>
+    <div class="tile"><div class="lbl">Alcance</div><div class="v" id="t-reach">177.132</div><div class="h">personas únicas</div></div>
+    <div class="tile"><div class="lbl">Impresiones</div><div class="v" id="t-imp">1.036.157</div><div class="h" id="t-imp-h">frecuencia 5,85</div></div>
+    <div class="tile"><div class="lbl">Clics (todos)</div><div class="v" id="t-clicks">32.609</div><div class="h" id="t-clicks-h">CTR 3,15%</div></div>
+    <div class="tile"><div class="lbl">Clics en el enlace</div><div class="v" id="t-link">17.869</div><div class="h" id="t-link-h">CPC ₲ 620</div></div>
+    <div class="tile"><div class="lbl">CPM</div><div class="v" id="t-cpm">₲ 10.697</div><div class="h">costo por mil impresiones</div></div>
+    <div class="tile"><div class="lbl">Interacciones</div><div class="v" id="t-inter">20.943</div><div class="h">con las publicaciones</div></div>
+    <div class="tile"><div class="lbl">Primeras respuestas</div><div class="v" id="t-resp">1.660</div><div class="h">de los chats abiertos</div></div>
     <div class="tile"><div class="lbl">Campañas</div><div class="v">9</div><div class="h">2 activas · 34 anuncios</div></div>
   </div>
 
@@ -450,8 +486,8 @@ footer{margin-top:64px;padding-top:23px}
 
   <section>
     <div class="sec-hd">
-      <h2>Campañas</h2>
-      <p class="sec-note">Ordenadas por inversión. El costo por contacto suma conversaciones y formularios.</p>
+      <h2>Campañas <span class="hist-tag">Histórico completo</span></h2>
+      <p class="sec-note">Ordenadas por inversión, sobre todo el período. El costo por contacto suma conversaciones y formularios.</p>
     </div>
     <div class="tw">
       <table id="tbl-camp">
@@ -467,7 +503,7 @@ footer{margin-top:64px;padding-top:23px}
 
   <section>
     <div class="sec-hd">
-      <h2>Anuncios</h2>
+      <h2>Anuncios <span class="hist-tag">Histórico completo</span></h2>
       <p class="sec-note">Los 34 anuncios de la cuenta, ordenados por inversión.</p>
     </div>
     <div class="tw">
@@ -483,7 +519,7 @@ footer{margin-top:64px;padding-top:23px}
 
   <section>
     <div class="sec-hd">
-      <h2>Dónde se mostraron los anuncios</h2>
+      <h2>Dónde se mostraron <span class="hist-tag">Histórico completo</span></h2>
       <p class="sec-note">Facebook concentra el gasto y también el mejor rendimiento por contacto.</p>
     </div>
     <div class="split">
@@ -507,7 +543,7 @@ footer{margin-top:64px;padding-top:23px}
 
   <section>
     <div class="sec-hd">
-      <h2>A quién le llegaron</h2>
+      <h2>A quién le llegaron <span class="hist-tag">Histórico completo</span></h2>
       <p class="sec-note">El CTR sube en cada tramo de edad; el costo por formulario baja con él.</p>
     </div>
     <div class="split">
@@ -580,17 +616,19 @@ footer{margin-top:64px;padding-top:23px}
   </footer>
 </div>
 <script>
-const DATA={"daily":[["05-13",7990,388,8,352,0,0,4],["05-14",15070,974,28,843,3,0,11],["05-15",8830,1166,32,953,3,0,24],["05-16",43212,2573,102,2013,10,0,65],["05-17",24898,1819,64,1345,7,0,45],["05-18",56186,3186,157,2265,20,0,84],["05-19",136970,7640,267,5001,27,0,141],["05-20",81216,4905,202,3423,19,0,107],["05-21",93102,5228,183,3615,21,0,101],["05-22",32440,1668,70,1275,7,0,33],["05-23",134664,7942,250,5776,17,0,130],["05-24",86757,5511,171,3489,17,0,92],["05-25",70801,3145,125,2048,6,0,62],["05-26",65531,3068,152,2137,11,0,83],["05-27",52811,3486,157,2432,20,0,92],["05-28",12684,812,24,654,1,0,13],["05-29",0,0,0,0,0,0,0],["06-03",85458,5910,152,5286,11,0,74],["06-04",84406,5640,222,3887,19,0,106],["06-05",85103,5505,219,3893,15,0,114],["06-06",86893,6381,224,4520,19,0,114],["06-07",59385,4811,175,3262,6,0,92],["06-08",51926,3370,139,2418,14,0,92],["06-09",88402,8122,343,5474,27,0,147],["06-10",102754,11702,579,7730,41,0,233],["06-11",72077,8531,339,5672,28,0,148],["06-12",73942,15205,300,5099,15,0,128],["06-13",61796,7768,235,4618,13,0,79],["06-14",85166,7977,345,5340,22,0,139],["06-15",82172,5776,223,3577,18,0,107],["06-16",94259,9981,229,5078,33,0,118],["06-17",15516,1218,32,1019,5,0,11],["06-18",30596,5205,165,3159,6,0,63],["06-19",97432,17200,456,8258,20,0,199],["06-20",118532,16352,369,8471,23,0,156],["06-21",91081,11434,338,6064,24,0,145],["06-22",105618,16669,368,6511,25,0,152],["06-23",56741,9387,223,3941,16,0,97],["06-24",114689,12667,291,6741,13,10,154],["06-25",144506,16054,415,7817,28,17,234],["06-26",124152,14322,350,7935,23,5,169],["06-27",104192,13112,276,6800,14,3,139],["06-28",12461,1207,32,1023,2,2,17],["06-29",123118,16624,258,9744,11,5,130],["06-30",174043,19011,409,11659,24,5,201],["07-01",209117,22612,504,14328,23,9,265],["07-02",55859,4951,142,4026,10,1,65],["07-03",0,0,0,0,0,0,0],["07-04",246328,20833,482,14461,27,8,240],["07-05",2302,252,5,219,0,1,3],["07-06",79789,8733,216,6599,10,6,112],["07-07",194316,15839,448,9672,17,4,215],["07-08",189283,14712,412,9583,25,7,183],["07-09",36612,3102,77,2485,9,3,36],["07-10",112706,9746,310,7335,12,4,137],["07-11",255314,22966,589,15713,34,6,291],["07-12",182248,16642,438,11402,23,3,219],["07-13",153786,12042,309,8327,25,6,166],["07-14",199289,17814,552,11376,30,14,311],["07-15",96657,9012,264,6550,13,2,134],["07-16",131256,13059,357,9220,17,2,212],["07-17",226753,19817,536,12813,23,6,323],["07-18",205680,21636,535,12200,23,7,339],["07-19",199100,24659,581,14919,21,9,369],["07-20",195512,19420,499,13617,25,11,291],["07-21",41699,4056,104,3162,7,2,65],["07-22",2706,266,12,234,0,0,8],["07-23",0,0,0,0,0,0,0],["07-24",132863,13509,338,8393,17,6,176],["07-25",249830,30823,799,20383,24,7,471],["07-26",195325,17638,529,12399,19,10,312],["07-27",75687,8933,280,5830,14,3,171],["07-28",136636,12941,420,8311,27,3,273],["07-29",126451,9714,327,6755,20,2,194],["07-30",80502,7450,307,4516,21,0,171],["07-31",26823,2650,86,1765,10,0,40],["08-01",71317,9039,294,7213,7,0,188],["08-03",0,0,0,0,0,0,0],["08-04",12786,1143,61,955,5,0,17],["08-05",35108,2328,103,1626,8,0,41],["08-06",42225,2800,74,2055,8,0,35],["08-07",36384,2295,60,1610,5,0,29],["08-08",42468,2845,98,2154,5,0,37],["08-09",22749,1252,42,934,3,0,21],["08-10",2453,139,4,127,1,0,3],["08-11",80787,7568,395,5313,13,4,261],["08-12",111441,9783,389,6984,12,5,257],["08-13",119666,10219,429,7410,19,9,271],["08-14",87218,7883,285,5813,12,8,181],["08-15",72096,6285,209,4407,14,4,121],["08-16",79485,8253,299,5887,8,2,181],["08-17",71818,7001,275,5199,23,11,172],["08-18",92884,7681,264,5854,10,4,160],["08-19",73351,6110,260,4542,10,5,145],["08-20",93557,7900,321,5538,15,3,161],["08-21",91626,7809,284,5571,18,5,158],["08-22",103704,7011,276,5166,13,2,165],["08-23",117104,8781,374,6331,16,6,239],["08-24",91833,7132,240,5268,16,3,148],["08-25",128400,9495,341,6776,12,2,204],["08-26",106127,8268,271,6063,19,3,154],["08-27",99734,7559,318,5344,21,4,191],["08-28",82196,6266,242,4479,14,3,145],["08-29",31483,2575,81,2005,5,0,40],["08-30",0,0,0,0,0,0,0],["08-31",117388,10453,416,7839,12,5,216],["09-01",134026,13188,500,9271,26,4,310],["09-02",75772,6896,262,4894,15,3,160],["09-03",79360,7479,291,5124,14,2,168],["09-04",60941,6006,269,4304,17,9,163],["09-05",55725,6033,244,4398,14,7,153],["09-06",68401,7484,301,5432,15,8,186],["09-07",62622,5994,240,4408,14,7,154],["09-08",84356,7489,310,5251,17,7,206],["09-09",79026,7725,339,5639,10,4,231],["09-10",59529,5390,221,3887,12,0,142],["09-11",51498,5204,248,3841,5,3,163],["09-12",49448,5477,257,4242,11,5,156],["09-13",74597,7290,352,5469,12,5,226],["09-14",2152,279,20,261,1,0,14],["09-15",61463,5231,227,4235,4,3,136],["09-16",10151,922,39,811,3,2,28],["09-17",0,0,0,0,0,0,0],["09-18",0,0,0,0,0,0,0],["09-19",0,0,0,0,0,0,0],["09-22",82231,6149,303,4281,6,7,183],["09-23",95485,8284,273,5707,16,4,160],["09-24",97925,8174,278,6026,10,3,178],["09-25",90506,7496,259,5493,4,2,146],["09-26",64595,4830,131,3681,5,0,64],["09-27",48237,4146,143,3071,9,0,68],["09-28",35419,2272,85,1704,8,0,39],["09-29",46662,3750,148,2560,9,0,52],["09-30",6646,635,8,494,2,0,5]],"campaigns":[["Toyota Urban Line Grupo C | WhatsApp","Interacción","ACTIVA",2558362,203449,54270,7281,3.58,12575,3.75,2899,0,643,"10 jun"],["FORMULARIO | Toyota Premium | Junio 2026","Clientes potenciales","PAUSADA",1939131,177087,49058,3517,1.99,10950,3.61,2029,150,72,"24 jun"],["Campaña Mensajes 16 may. 26","Interacción","PAUSADA",1441555,89372,35778,3342,3.74,16130,2.5,1793,0,298,"16 may"],["FORMULARIO | HILUX 6 MODELOS | Julio 2026","Clientes potenciales","PAUSADA",1376330,160320,39743,7646,4.77,8585,4.03,6078,212,113,"13 jul"],["Hilux 2.4 Grupo A | WhatsApp","Interacción","PAUSADA",1192907,146074,36389,4054,2.78,8166,4.01,1769,0,258,"09 jun"],["Hilux 2.8 Grupo B | WhatsApp","Interacción","PAUSADA",1168593,146821,31648,3211,2.19,7959,4.64,1586,0,192,"09 jun"],["Fortuner SRV 2027 | WhatsApp | Reserva","Interacción","ACTIVA",959882,84934,24510,2591,3.05,11302,3.47,1331,0,169,"29 jul"],["Toyota Urban Line | Público Nuevo | WhatsApp","Interacción","PAUSADA",414109,25374,12691,892,3.52,16320,2.0,341,0,62,"19 ago"],["Campaña Inicio 13 may - 2026","Interacción","ARCHIVADA",33118,2726,2165,75,2.75,12149,1.26,43,0,6,"13 may"]],"ads":[["CARRUSEL | HILUX 2027 | 6 VERSIONES","FORMULARIO | HILUX  6 MODELOS | Julio 2026",1376330,160320,39743,4.77,8585,6078,212,113],["Fortuner SRV 2027","Fortuner SRV 2027 | WhatsApp | Reserva | Agosto 2026",959955,84940,24500,3.05,11302,1331,0,169],["Toyota Rush","Toyota Urban Line  Grupo C | WhatsApp | 10 de jun.",945921,84204,21072,3.81,11234,1295,0,297],["Land Cruiser Prado 2026 - Formulario","FORMULARIO | Toyota Premium | Junio 2026",708170,60777,26513,2.03,11652,743,71,27],["Toyota Raize","Campaña Mensajes 16 may. 26",680467,33896,17796,4.01,20075,715,0,130],["Hilux DX Doble Cabina","Hilux 2.4 Grupo A  | WhatsApp | 9 de jun.",578541,78849,24109,2.68,7337,895,0,132],["Land Cruiser 300 GR-S - Formulario","FORMULARIO | Toyota Premium | Junio 2026",544874,52948,23999,1.77,10291,436,24,16],["HILUX SRX","Hilux 2.8 Grupo B  | WhatsApp | 9 de jun.",540914,58272,20073,2.36,9283,695,0,92],["HILUX SRV LIMITED","Hilux 2.8 Grupo B  | WhatsApp | 9 de jun.",462981,65434,15023,1.71,7076,558,0,62],["Hilux SR Automática","Hilux 2.4 Grupo A  | WhatsApp | 9 de jun.",448105,44461,15600,3.02,10079,599,0,100],["Toyota Agya","Toyota Urban Line  Grupo C | WhatsApp | 10 de jun.",439531,39030,16201,2.89,11261,432,0,98],["Toyota Rush | Septiembre 2026","Toyota Urban Line  Grupo C | WhatsApp | 10 de jun.",404974,30747,13079,4.2,13171,491,0,98],["Toyota Hilux 2026","Campaña Mensajes 16 may. 26",375529,34596,14319,3.27,10855,620,0,84],["RAV4 - Formulario","FORMULARIO | Toyota Premium | Junio 2026",341983,30159,11664,2.79,11339,526,34,20],["Land Cruiser 300 VX - Formulario","FORMULARIO | Toyota Premium | Junio 2026",333341,32435,14555,1.46,10277,304,20,8],["Toyota Yaris Cross","Campaña Mensajes 16 may. 26",285689,15663,8031,3.75,18240,317,0,46],["Toyota Raize","Toyota Urban Line  Grupo C | WhatsApp | 10 de jun.",266706,16453,8577,3.18,16210,231,0,48],["Toyota Rush | Transferencia incluida | Publico Nuevo","Toyota Urban Line | Publico Nuevo (sin intereses) | WhatsApp | Ago 2026",252345,14760,8275,3.71,17097,215,0,42],["Toyota Rush | Transferencia incluida | Ago 2026","Toyota Urban Line  Grupo C | WhatsApp | 10 de jun.",177550,11879,7189,3.4,14947,158,0,26],["Hilux DX Cabina Simple","Hilux 2.4 Grupo A  | WhatsApp | 9 de jun.",166261,22764,11092,2.62,7304,275,0,26],["HILUX GR-S","Hilux 2.8 Grupo B  | WhatsApp | 9 de jun.",164698,23115,9969,3.1,7125,333,0,38],["Toyota Yaris Cross | Septiembre 2026","Toyota Urban Line  Grupo C | WhatsApp | 10 de jun.",164156,10458,4874,3.39,15697,131,0,17],["Toyota Yaris Cross | Transferencia incluida | Publico Nuevo","Toyota Urban Line | Publico Nuevo (sin intereses) | WhatsApp | Ago 2026",134361,9212,5371,3.27,14585,107,0,18],["Toyota Corolla Cross Híbrido 2026","Campaña Mensajes 16 may. 26",99870,5217,2945,5.1,19143,141,0,38],["Toyota Yaris Cross","Toyota Urban Line  Grupo C | WhatsApp | 10 de jun.",91393,6012,3775,4.13,15202,108,0,47],["Toyota Raize | Septiembre 2026","Toyota Urban Line  Grupo C | WhatsApp | 10 de jun.",36730,2697,2036,2.56,13619,31,0,9],["Toyota Raize | Transferencia incluida | Publico Nuevo","Toyota Urban Line | Publico Nuevo (sin intereses) | WhatsApp | Ago 2026",27403,1402,1126,3.14,19546,19,0,2],["Toyota Yaris Cross","Campaña Inicio 13 may - 2026",18927,957,800,2.3,19777,12,0,1],["Toyota Yaris Cross | Transferencia incluida | Ago 2026","Toyota Urban Line  Grupo C | WhatsApp | 10 de jun.",17168,1222,903,3.19,14049,11,0,0],["Toyota Raize | Transferencia incluida | Ago 2026","Toyota Urban Line  Grupo C | WhatsApp | 10 de jun.",14341,759,632,2.64,18895,11,0,3],["RAV4 - Formulario","FORMULARIO | Toyota Premium | Junio 2026",10763,768,649,4.69,14014,20,1,1],["Toyota Hilux 2026","Campaña Inicio 13 may - 2026",8105,1098,890,2.46,7382,18,0,3],["Toyota Corolla Cross Híbrido 2026","Campaña Inicio 13 may - 2026",5166,463,415,3.67,11158,6,0,2],["Toyota Raize","Campaña Inicio 13 may - 2026",920,208,183,4.33,4423,7,0,0]],"platforms":[["Facebook",6839115,662707,133649,25755,3.89,10320,238,1240],["Instagram",3937821,286168,65134,6340,2.22,13761,124,507],["WhatsApp",307232,87300,9524,514,0.59,3519,0,66]],"ages":[["18–24",704945,94406,20296,2216,2.35,7467,11,147],["25–34",2888722,309781,59012,7374,2.38,9325,90,493],["35–44",3682599,315322,54644,10489,3.33,11679,124,611],["45–54",2154869,151575,27029,7020,4.63,14217,75,315],["55–64",1043087,67060,12014,3611,5.38,15555,39,151],["65+",468636,24856,4997,1537,6.18,18854,23,71],["Sin definir",141310,73175,40,362,0.49,1931,0,25]],"genders":[["Hombres",8050078,776591,133708,25486,3.28,10366,321,1242],["Mujeres",2839641,182756,44684,6626,3.63,15538,40,536],["Sin definir",194449,76828,817,497,0.65,2531,1,35]]};
+const DATA={"daily":[["05-13",7990,388,8,352,0,0,4],["05-14",15070,974,28,843,3,0,11],["05-15",8830,1166,32,953,3,0,24],["05-16",43212,2573,102,2013,10,0,65],["05-17",24898,1819,64,1345,7,0,45],["05-18",56186,3186,157,2265,20,0,84],["05-19",136970,7640,267,5001,27,0,141],["05-20",81216,4905,202,3423,19,0,107],["05-21",93102,5228,183,3615,21,0,101],["05-22",32440,1668,70,1275,7,0,33],["05-23",134664,7942,250,5776,17,0,130],["05-24",86757,5511,171,3489,17,0,92],["05-25",70801,3145,125,2048,6,0,62],["05-26",65531,3068,152,2137,11,0,83],["05-27",52811,3486,157,2432,20,0,92],["05-28",12684,812,24,654,1,0,13],["05-29",0,0,0,0,0,0,0],["06-03",85458,5910,152,5286,11,0,74],["06-04",84406,5640,222,3887,19,0,106],["06-05",85103,5505,219,3893,15,0,114],["06-06",86893,6381,224,4520,19,0,114],["06-07",59385,4811,175,3262,6,0,92],["06-08",51926,3370,139,2418,14,0,92],["06-09",88402,8122,343,5474,27,0,147],["06-10",102754,11702,579,7730,41,0,233],["06-11",72077,8531,339,5672,28,0,148],["06-12",73942,15205,300,5099,15,0,128],["06-13",61796,7768,235,4618,13,0,79],["06-14",85166,7977,345,5340,22,0,139],["06-15",82172,5776,223,3577,18,0,107],["06-16",94259,9981,229,5078,33,0,118],["06-17",15516,1218,32,1019,5,0,11],["06-18",30596,5205,165,3159,6,0,63],["06-19",97432,17200,456,8258,20,0,199],["06-20",118532,16352,369,8471,23,0,156],["06-21",91081,11434,338,6064,24,0,145],["06-22",105618,16669,368,6511,25,0,152],["06-23",56741,9387,223,3941,16,0,97],["06-24",114689,12667,291,6741,13,10,154],["06-25",144506,16054,415,7817,28,17,234],["06-26",124152,14322,350,7935,23,5,169],["06-27",104192,13112,276,6800,14,3,139],["06-28",12461,1207,32,1023,2,2,17],["06-29",123118,16624,258,9744,11,5,130],["06-30",174043,19011,409,11659,24,5,201],["07-01",209117,22612,504,14328,23,9,265],["07-02",55859,4951,142,4026,10,1,65],["07-03",0,0,0,0,0,0,0],["07-04",246328,20833,482,14461,27,8,240],["07-05",2302,252,5,219,0,1,3],["07-06",79789,8733,216,6599,10,6,112],["07-07",194316,15839,448,9672,17,4,215],["07-08",189283,14712,412,9583,25,7,183],["07-09",36612,3102,77,2485,9,3,36],["07-10",112706,9746,310,7335,12,4,137],["07-11",255314,22966,589,15713,34,6,291],["07-12",182248,16642,438,11402,23,3,219],["07-13",153786,12042,309,8327,25,6,166],["07-14",199289,17814,552,11376,30,14,311],["07-15",96657,9012,264,6550,13,2,134],["07-16",131256,13059,357,9220,17,2,212],["07-17",226753,19817,536,12813,23,6,323],["07-18",205680,21636,535,12200,23,7,339],["07-19",199100,24659,581,14919,21,9,369],["07-20",195512,19420,499,13617,25,11,291],["07-21",41699,4056,104,3162,7,2,65],["07-22",2706,266,12,234,0,0,8],["07-23",0,0,0,0,0,0,0],["07-24",132863,13509,338,8393,17,6,176],["07-25",249830,30823,799,20383,24,7,471],["07-26",195325,17638,529,12399,19,10,312],["07-27",75687,8933,280,5830,14,3,171],["07-28",136636,12941,420,8311,27,3,273],["07-29",126451,9714,327,6755,20,2,194],["07-30",80502,7450,307,4516,21,0,171],["07-31",26823,2650,86,1765,10,0,40],["08-01",71317,9039,294,7213,7,0,188],["08-03",0,0,0,0,0,0,0],["08-04",12786,1143,61,955,5,0,17],["08-05",35108,2328,103,1626,8,0,41],["08-06",42225,2800,74,2055,8,0,35],["08-07",36384,2295,60,1610,5,0,29],["08-08",42468,2845,98,2154,5,0,37],["08-09",22749,1252,42,934,3,0,21],["08-10",2453,139,4,127,1,0,3],["08-11",80787,7568,395,5313,13,4,261],["08-12",111441,9783,389,6984,12,5,257],["08-13",119666,10219,429,7410,19,9,271],["08-14",87218,7883,285,5813,12,8,181],["08-15",72096,6285,209,4407,14,4,121],["08-16",79485,8253,299,5887,8,2,181],["08-17",71818,7001,275,5199,23,11,172],["08-18",92884,7681,264,5854,10,4,160],["08-19",73351,6110,260,4542,10,5,145],["08-20",93557,7900,321,5538,15,3,161],["08-21",91626,7809,284,5571,18,5,158],["08-22",103704,7011,276,5166,13,2,165],["08-23",117104,8781,374,6331,16,6,239],["08-24",91833,7132,240,5268,16,3,148],["08-25",128400,9495,341,6776,12,2,204],["08-26",106127,8268,271,6063,19,3,154],["08-27",99734,7559,318,5344,21,4,191],["08-28",82196,6266,242,4479,14,3,145],["08-29",31483,2575,81,2005,5,0,40],["08-30",0,0,0,0,0,0,0],["08-31",117388,10453,416,7839,12,5,216],["09-01",134026,13188,500,9271,26,4,310],["09-02",75772,6896,262,4894,15,3,160],["09-03",79360,7479,291,5124,14,2,168],["09-04",60941,6006,269,4304,17,9,163],["09-05",55725,6033,244,4398,14,7,153],["09-06",68401,7484,301,5432,15,8,186],["09-07",62622,5994,240,4408,14,7,154],["09-08",84356,7489,310,5251,17,7,206],["09-09",79026,7725,339,5639,10,4,231],["09-10",59529,5390,221,3887,12,0,142],["09-11",51498,5204,248,3841,5,3,163],["09-12",49448,5477,257,4242,11,5,156],["09-13",74597,7290,352,5469,12,5,226],["09-14",2152,279,20,261,1,0,14],["09-15",61463,5231,227,4235,4,3,136],["09-16",10151,922,39,811,3,2,28],["09-17",0,0,0,0,0,0,0],["09-18",0,0,0,0,0,0,0],["09-19",0,0,0,0,0,0,0],["09-22",82231,6149,303,4281,6,7,183],["09-23",95485,8284,273,5707,16,4,160],["09-24",97925,8174,278,6026,10,3,178],["09-25",90506,7496,259,5493,4,2,146],["09-26",64595,4830,131,3681,5,0,64],["09-27",48237,4146,143,3071,9,0,68],["09-28",35419,2272,85,1704,8,0,39],["09-29",46662,3750,148,2560,9,0,52],["09-30",6646,635,8,494,2,0,5]],"campaigns":[["Toyota Urban Line Grupo C | WhatsApp","Interacción","ACTIVA",2558362,203449,54270,7281,3.58,12575,3.75,2899,0,643,"10 jun"],["FORMULARIO | Toyota Premium | Junio 2026","Clientes potenciales","PAUSADA",1939131,177087,49058,3517,1.99,10950,3.61,2029,150,72,"24 jun"],["Campaña Mensajes 16 may. 26","Interacción","PAUSADA",1441555,89372,35778,3342,3.74,16130,2.5,1793,0,298,"16 may"],["FORMULARIO | HILUX 6 MODELOS | Julio 2026","Clientes potenciales","PAUSADA",1376330,160320,39743,7646,4.77,8585,4.03,6078,212,113,"13 jul"],["Hilux 2.4 Grupo A | WhatsApp","Interacción","PAUSADA",1192907,146074,36389,4054,2.78,8166,4.01,1769,0,258,"09 jun"],["Hilux 2.8 Grupo B | WhatsApp","Interacción","PAUSADA",1168593,146821,31648,3211,2.19,7959,4.64,1586,0,192,"09 jun"],["Fortuner SRV 2027 | WhatsApp | Reserva","Interacción","ACTIVA",959882,84934,24510,2591,3.05,11302,3.47,1331,0,169,"29 jul"],["Toyota Urban Line | Público Nuevo | WhatsApp","Interacción","PAUSADA",414109,25374,12691,892,3.52,16320,2.0,341,0,62,"19 ago"],["Campaña Inicio 13 may - 2026","Interacción","ARCHIVADA",33118,2726,2165,75,2.75,12149,1.26,43,0,6,"13 may"]],"ads":[["CARRUSEL | HILUX 2027 | 6 VERSIONES","FORMULARIO | HILUX  6 MODELOS | Julio 2026",1376330,160320,39743,4.77,8585,6078,212,113],["Fortuner SRV 2027","Fortuner SRV 2027 | WhatsApp | Reserva | Agosto 2026",959955,84940,24500,3.05,11302,1331,0,169],["Toyota Rush","Toyota Urban Line  Grupo C | WhatsApp | 10 de jun.",945921,84204,21072,3.81,11234,1295,0,297],["Land Cruiser Prado 2026 - Formulario","FORMULARIO | Toyota Premium | Junio 2026",708170,60777,26513,2.03,11652,743,71,27],["Toyota Raize","Campaña Mensajes 16 may. 26",680467,33896,17796,4.01,20075,715,0,130],["Hilux DX Doble Cabina","Hilux 2.4 Grupo A  | WhatsApp | 9 de jun.",578541,78849,24109,2.68,7337,895,0,132],["Land Cruiser 300 GR-S - Formulario","FORMULARIO | Toyota Premium | Junio 2026",544874,52948,23999,1.77,10291,436,24,16],["HILUX SRX","Hilux 2.8 Grupo B  | WhatsApp | 9 de jun.",540914,58272,20073,2.36,9283,695,0,92],["HILUX SRV LIMITED","Hilux 2.8 Grupo B  | WhatsApp | 9 de jun.",462981,65434,15023,1.71,7076,558,0,62],["Hilux SR Automática","Hilux 2.4 Grupo A  | WhatsApp | 9 de jun.",448105,44461,15600,3.02,10079,599,0,100],["Toyota Agya","Toyota Urban Line  Grupo C | WhatsApp | 10 de jun.",439531,39030,16201,2.89,11261,432,0,98],["Toyota Rush | Septiembre 2026","Toyota Urban Line  Grupo C | WhatsApp | 10 de jun.",404974,30747,13079,4.2,13171,491,0,98],["Toyota Hilux 2026","Campaña Mensajes 16 may. 26",375529,34596,14319,3.27,10855,620,0,84],["RAV4 - Formulario","FORMULARIO | Toyota Premium | Junio 2026",341983,30159,11664,2.79,11339,526,34,20],["Land Cruiser 300 VX - Formulario","FORMULARIO | Toyota Premium | Junio 2026",333341,32435,14555,1.46,10277,304,20,8],["Toyota Yaris Cross","Campaña Mensajes 16 may. 26",285689,15663,8031,3.75,18240,317,0,46],["Toyota Raize","Toyota Urban Line  Grupo C | WhatsApp | 10 de jun.",266706,16453,8577,3.18,16210,231,0,48],["Toyota Rush | Transferencia incluida | Publico Nuevo","Toyota Urban Line | Publico Nuevo (sin intereses) | WhatsApp | Ago 2026",252345,14760,8275,3.71,17097,215,0,42],["Toyota Rush | Transferencia incluida | Ago 2026","Toyota Urban Line  Grupo C | WhatsApp | 10 de jun.",177550,11879,7189,3.4,14947,158,0,26],["Hilux DX Cabina Simple","Hilux 2.4 Grupo A  | WhatsApp | 9 de jun.",166261,22764,11092,2.62,7304,275,0,26],["HILUX GR-S","Hilux 2.8 Grupo B  | WhatsApp | 9 de jun.",164698,23115,9969,3.1,7125,333,0,38],["Toyota Yaris Cross | Septiembre 2026","Toyota Urban Line  Grupo C | WhatsApp | 10 de jun.",164156,10458,4874,3.39,15697,131,0,17],["Toyota Yaris Cross | Transferencia incluida | Publico Nuevo","Toyota Urban Line | Publico Nuevo (sin intereses) | WhatsApp | Ago 2026",134361,9212,5371,3.27,14585,107,0,18],["Toyota Corolla Cross Híbrido 2026","Campaña Mensajes 16 may. 26",99870,5217,2945,5.1,19143,141,0,38],["Toyota Yaris Cross","Toyota Urban Line  Grupo C | WhatsApp | 10 de jun.",91393,6012,3775,4.13,15202,108,0,47],["Toyota Raize | Septiembre 2026","Toyota Urban Line  Grupo C | WhatsApp | 10 de jun.",36730,2697,2036,2.56,13619,31,0,9],["Toyota Raize | Transferencia incluida | Publico Nuevo","Toyota Urban Line | Publico Nuevo (sin intereses) | WhatsApp | Ago 2026",27403,1402,1126,3.14,19546,19,0,2],["Toyota Yaris Cross","Campaña Inicio 13 may - 2026",18927,957,800,2.3,19777,12,0,1],["Toyota Yaris Cross | Transferencia incluida | Ago 2026","Toyota Urban Line  Grupo C | WhatsApp | 10 de jun.",17168,1222,903,3.19,14049,11,0,0],["Toyota Raize | Transferencia incluida | Ago 2026","Toyota Urban Line  Grupo C | WhatsApp | 10 de jun.",14341,759,632,2.64,18895,11,0,3],["RAV4 - Formulario","FORMULARIO | Toyota Premium | Junio 2026",10763,768,649,4.69,14014,20,1,1],["Toyota Hilux 2026","Campaña Inicio 13 may - 2026",8105,1098,890,2.46,7382,18,0,3],["Toyota Corolla Cross Híbrido 2026","Campaña Inicio 13 may - 2026",5166,463,415,3.67,11158,6,0,2],["Toyota Raize","Campaña Inicio 13 may - 2026",920,208,183,4.33,4423,7,0,0]],"platforms":[["Facebook",6839115,662707,133649,25755,3.89,10320,238,1240],["Instagram",3937821,286168,65134,6340,2.22,13761,124,507],["WhatsApp",307232,87300,9524,514,0.59,3519,0,66]],"ages":[["18–24",704945,94406,20296,2216,2.35,7467,11,147],["25–34",2888722,309781,59012,7374,2.38,9325,90,493],["35–44",3682599,315322,54644,10489,3.33,11679,124,611],["45–54",2154869,151575,27029,7020,4.63,14217,75,315],["55–64",1043087,67060,12014,3611,5.38,15555,39,151],["65+",468636,24856,4997,1537,6.18,18854,23,71],["Sin definir",141310,73175,40,362,0.49,1931,0,25]],"genders":[["Hombres",8050078,776591,133708,25486,3.28,10366,321,1242],["Mujeres",2839641,182756,44684,6626,3.63,15538,40,536],["Sin definir",194449,76828,817,497,0.65,2531,1,35]],"months":[{"k":"all","l":"Histórico","sub":"13 may – 30 sep","spend":11083987,"imp":1036157,"reach":177132,"freq":5.85,"clicks":32609,"ctr":3.15,"cpm":10697,"cpc":620,"conv":1813,"leads":362,"link":17869,"inter":20943,"resp":1660,"dias":126,"totdias":141},{"l":"Mayo","sub":"13 – 31 may","spend":923162,"imp":53511,"reach":22574,"freq":2.37,"clicks":1992,"ctr":3.72,"cpm":17252,"cpc":849,"conv":189,"leads":0,"link":1087,"inter":1441,"resp":181,"totdias":19,"k":"05","dias":16},{"l":"Junio","sub":"1 – 30 jun","spend":2426416,"imp":277141,"reach":65466,"freq":4.23,"clicks":7706,"ctr":2.78,"cpm":8755,"cpc":682,"conv":515,"leads":47,"link":3558,"inter":4336,"resp":470,"totdias":30,"k":"06","dias":28},{"l":"Julio","sub":"1 – 31 jul","spend":4040429,"imp":385827,"reach":95508,"freq":4.04,"clicks":10458,"ctr":2.71,"cpm":10472,"cpc":698,"conv":526,"leads":142,"link":5792,"inter":6721,"resp":474,"totdias":31,"k":"07","dias":29},{"l":"Agosto","sub":"1 – 31 ago","spend":2117388,"imp":175873,"reach":55198,"freq":3.19,"clicks":6705,"ctr":3.81,"cpm":12039,"cpc":537,"conv":324,"leads":88,"link":3941,"inter":4481,"resp":298,"totdias":31,"k":"08","dias":28},{"l":"Septiembre","sub":"1 – 30 sep","spend":1576773,"imp":143823,"reach":45480,"freq":3.16,"clicks":5748,"ctr":3.997,"cpm":10963,"cpc":452,"conv":259,"leads":85,"link":3491,"inter":3964,"resp":237,"totdias":30,"k":"09","dias":25}]};
 (function(){
-  var G = function(n){ return "₲ " + n.toLocaleString("es-PY"); };
-  var N = function(n){ return n.toLocaleString("es-PY"); };
+  var G = function(n){ return "₲ " + Math.round(n).toLocaleString("es-PY"); };
+  var N = function(n){ return Math.round(n).toLocaleString("es-PY"); };
   var P = function(n){ return n.toLocaleString("es-PY",{minimumFractionDigits:2,maximumFractionDigits:2}) + "%"; };
   var F = function(n){ return n.toLocaleString("es-PY",{minimumFractionDigits:2,maximumFractionDigits:2}); };
   var MES = ["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"];
   var fecha = function(md){ var p = md.split("-"); return parseInt(p[1],10) + " " + MES[parseInt(p[0],10)-1]; };
   var css = function(v){ return getComputedStyle(document.body).getPropertyValue(v).trim(); };
 
-  /* ---------- full daily series, gaps filled with zeros ---------- */
+  var q = function(id){ return document.getElementById(id); };
+
+  /* ---------- serie diaria completa, huecos rellenados con ceros ---------- */
   var map = {}; DATA.daily.forEach(function(d){ map[d[0]] = d; });
   var series = [], cur = new Date(2026,4,13), end = new Date(2026,8,30);
   while(cur <= end){
@@ -599,36 +637,97 @@ const DATA={"daily":[["05-13",7990,388,8,352,0,0,4],["05-14",15070,974,28,843,3,
     cur.setDate(cur.getDate()+1);
   }
 
+  var current = "all";
+  function mes(){ for(var i=0;i<DATA.months.length;i++) if(DATA.months[i].k === current) return DATA.months[i]; }
+  function serie(){ return current === "all" ? series : series.filter(function(d){ return d[0].slice(0,2) === current; }); }
+
+  function picker(){
+    var host = q("picker");
+    DATA.months.forEach(function(m){
+      var b = document.createElement("button");
+      b.className = "mbtn" + (m.k === current ? " on" : "");
+      b.setAttribute("data-k", m.k);
+      b.innerHTML = '<span class="ml">'+m.l+'</span><span class="ms">'+m.sub+'</span>';
+      b.addEventListener("click", function(){
+        if(current === m.k) return;
+        current = m.k;
+        [].forEach.call(host.querySelectorAll(".mbtn"), function(x){ x.classList.toggle("on", x.getAttribute("data-k") === current); });
+        render();
+      });
+      host.appendChild(b);
+    });
+  }
+
+  function kpis(){
+    var m = mes(), contactos = m.conv + m.leads;
+    q("k-periodo").textContent = m.k === "all" ? "13 may – 30 sep 2026" : m.sub + " 2026";
+    q("k-dias").textContent = m.dias + " de " + m.totdias;
+    q("h-spend").innerHTML = "₲&nbsp;" + N(m.spend).replace(/ /g,"&nbsp;");
+    q("h-spend-foot").innerHTML = "Promedio de <b class=\"num\">" + G(m.spend/m.dias) + "</b> por día con entrega" +
+      (m.k === "all" ? ", sobre 9 campañas y 34 anuncios" : "");
+    q("h-cont").textContent = N(contactos);
+    q("h-cont-foot").textContent = N(m.conv) + " conversaciones iniciadas + " + N(m.leads) + " formularios completados";
+    q("h-cpc").innerHTML = contactos ? "₲&nbsp;" + N(m.spend/contactos).replace(/ /g,"&nbsp;") : "—";
+    q("h-cpc-foot").textContent = contactos
+      ? "La inversión del período dividida por los " + N(contactos) + " contactos"
+      : "Sin contactos registrados en el período";
+    q("t-reach").textContent = N(m.reach);
+    q("t-imp").textContent = N(m.imp);
+    q("t-imp-h").textContent = "frecuencia " + F(m.freq);
+    q("t-clicks").textContent = N(m.clicks);
+    q("t-clicks-h").textContent = "CTR " + P(m.ctr);
+    q("t-link").textContent = N(m.link);
+    q("t-link-h").textContent = "CPC " + G(m.cpc);
+    q("t-cpm").textContent = G(m.cpm);
+    q("t-inter").textContent = N(m.inter);
+    q("t-resp").textContent = N(m.resp);
+  }
+
   var SVGNS = "http://www.w3.org/2000/svg";
   function el(t,a){ var e = document.createElementNS(SVGNS,t); for(var k in a) e.setAttribute(k,a[k]); return e; }
 
   /* ---------- month tick positions ---------- */
-  function monthTicks(){
-    var out = [];
-    series.forEach(function(d,i){
-      var day = d[0].split("-")[1];
-      if(day === "01" || i === 0) out.push({i:i, l: MES[parseInt(d[0].split("-")[0],10)-1]});
+  function monthTicks(s){
+    var out = [], last = null;
+    s.forEach(function(d,i){
+      var mo = d[0].slice(0,2);
+      if(mo !== last){ last = mo; out.push({i:i, l: MES[parseInt(mo,10)-1]}); }
     });
+    if(out.length === 1){
+      out = [];
+      s.forEach(function(d,i){ if(i % 5 === 0) out.push({i:i, l: parseInt(d[0].slice(3),10)}); });
+    }
     return out;
+  }
+  function fmtAxis(v){
+    if(v === 0) return "0";
+    if(v >= 1000000) return (v/1000000).toLocaleString("es-PY",{maximumFractionDigits:1}) + "M";
+    return Math.round(v/1000) + "k";
   }
 
   /* ================= chart 1 : inversión diaria (área) ================= */
   function spendChart(){
-    var host = document.getElementById("c-spend"), tip = document.getElementById("t-spend");
+    var host = q("c-spend"), tip = q("t-spend");
+    var old = host.querySelector("svg"); if(old) old.remove();
+    var series = serie();
     var W = 1000, H = 236, ml = 62, mr = 10, mt = 12, mb = 26;
     var iw = W - ml - mr, ih = H - mt - mb;
-    var max = 280000, n = series.length;
+    var n = series.length;
+    var peak = 0; series.forEach(function(d){ if(d[1] > peak) peak = d[1]; });
+    if(peak <= 0) peak = 1000;
+    var mag = Math.pow(10, Math.floor(Math.log10(peak/4)));
+    var stepv = Math.ceil(peak/4/mag) * mag, max = stepv * 4;
     var x = function(i){ return ml + (iw * (i + 0.5) / n); };
     var y = function(v){ return mt + ih - (v / max) * ih; };
     var svg = el("svg",{viewBox:"0 0 "+W+" "+H,role:"img","aria-label":"Inversión diaria en guaraníes, del 13 de mayo al 30 de septiembre de 2026"});
 
-    [0,70000,140000,210000,280000].forEach(function(v){
+    [0, stepv, stepv*2, stepv*3, stepv*4].forEach(function(v){
       svg.appendChild(el("line",{x1:ml,x2:W-mr,y1:y(v),y2:y(v),stroke:css("--line"),"stroke-width":v===0?1.5:1}));
       var t = el("text",{x:ml-10,y:y(v)+4,"text-anchor":"end",fill:css("--ink-3"),"font-size":11,"font-family":'"IBM Plex Mono",monospace'});
-      t.textContent = v === 0 ? "0" : (v/1000) + "k";
+      t.textContent = fmtAxis(v);
       svg.appendChild(t);
     });
-    monthTicks().forEach(function(t){
+    monthTicks(series).forEach(function(t){
       var g = el("text",{x:x(t.i),y:H-8,"text-anchor":"middle",fill:css("--ink-3"),"font-size":11,"font-family":'"IBM Plex Mono",monospace'});
       g.textContent = t.l; svg.appendChild(g);
     });
@@ -682,10 +781,12 @@ const DATA={"daily":[["05-13",7990,388,8,352,0,0,4],["05-14",15070,974,28,843,3,
 
   /* ================= chart 2 : contactos por día (barras apiladas) ================= */
   function resChart(){
-    var host = document.getElementById("c-res"), tip = document.getElementById("t-res");
+    var host = q("c-res"), tip = q("t-res");
+    var old = host.querySelector("svg"); if(old) old.remove();
+    var series = serie();
     var W = 1000, H = 190, ml = 62, mr = 10, mt = 12, mb = 26;
     var iw = W - ml - mr, ih = H - mt - mb;
-    var n = series.length, max = 12;
+    var n = series.length, max = 4;
     series.forEach(function(d){ max = Math.max(max, d[5] + d[6]); });
     max = Math.ceil(max / 4) * 4;
     var bw = iw / n, w = Math.max(3, bw - 2);
@@ -697,7 +798,7 @@ const DATA={"daily":[["05-13",7990,388,8,352,0,0,4],["05-14",15070,974,28,843,3,
       var t = el("text",{x:ml-10,y:y(v)+4,"text-anchor":"end",fill:css("--ink-3"),"font-size":11,"font-family":'"IBM Plex Mono",monospace'});
       t.textContent = N(v); svg.appendChild(t);
     });
-    monthTicks().forEach(function(t){
+    monthTicks(series).forEach(function(t){
       var g = el("text",{x:ml + bw*(t.i+0.5),y:H-8,"text-anchor":"middle",fill:css("--ink-3"),"font-size":11,"font-family":'"IBM Plex Mono",monospace'});
       g.textContent = t.l; svg.appendChild(g);
     });
@@ -816,7 +917,9 @@ const DATA={"daily":[["05-13",7990,388,8,352,0,0,4],["05-14",15070,974,28,843,3,
     });
   }
 
-  spendChart(); resChart(); campaigns(); ads();
+  function render(){ kpis(); spendChart(); resChart(); }
+
+  picker(); render(); campaigns(); ads();
   bars("plat", DATA.platforms, 11084168);
   bars("gen", DATA.genders, 11084168);
   platTable(); ageTable();
